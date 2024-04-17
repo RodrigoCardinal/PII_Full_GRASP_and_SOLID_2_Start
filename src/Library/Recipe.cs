@@ -11,28 +11,34 @@ namespace Full_GRASP_And_SOLID.Library
 {
     public class Recipe
     {
-        private ArrayList steps = new ArrayList();
+        public static ArrayList steps = new ArrayList();
 
-        public Product FinalProduct { get; set; }
+        public static Product FinalProduct { get; set; }
+        public static double TotalAll {get; set;}
+        public static double TotalProduct {get; set;}
+        public static double TotalEquipment {get; set;}
+
 
         public void AddStep(Step step)
         {
-            this.steps.Add(step);
+            Recipe.steps.Add(step);
+
         }
 
         public void RemoveStep(Step step)
         {
-            this.steps.Remove(step);
+            Recipe.steps.Remove(step);
         }
-
-        public void PrintRecipe()
+        public static double GetProductionCost()
         {
-            Console.WriteLine($"Receta de {this.FinalProduct.Description}:");
-            foreach (Step step in this.steps)
+            foreach (Step step in Recipe.steps)
             {
-                Console.WriteLine($"{step.Quantity} de '{step.Input.Description}' " +
-                    $"usando '{step.Equipment.Description}' durante {step.Time}");
+                TotalProduct += step.Quantity * step.Input.UnitCost;
+                TotalEquipment += step.Time * step.Equipment.HourlyCost;
+                TotalAll = TotalProduct + TotalEquipment;
+
             }
+            return TotalAll;
         }
     }
 }
